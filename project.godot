@@ -14,6 +14,16 @@ config/name="ProjectGrimoir"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[file_customization]
+
+folder_colors={
+"res://assets/resources/": "green",
+"res://assets/resources/tilesets/": "teal",
+"res://assets/scenes/": "red",
+"res://assets/scripts/": "yellow",
+"res://assets/textures/": "blue"
+}
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
