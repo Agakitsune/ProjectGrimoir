@@ -1,7 +1,5 @@
 extends Node2D
 
-const SHADER := preload("uid://bvkyhyyixvc5l")
-
 var castle := Castlevania.new()
 
 @onready var camera_2d: Camera2D = $Camera2D

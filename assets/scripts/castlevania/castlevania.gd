@@ -5,8 +5,6 @@ class_name Castlevania
 # https://www.gamedeveloper.com/programming/procedural-dungeon-generation-algorithm
 
 const TILESET := preload("uid://c1k3oxffmy2kj")
-const NOISE := preload("uid://c57ypdim15txx")
-const RAMP := preload("uid://bjsckt3mbsb7p")
 
 var _spawn: GraphCell
 
