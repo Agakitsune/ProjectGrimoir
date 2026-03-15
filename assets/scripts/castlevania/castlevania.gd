@@ -5,6 +5,7 @@ class_name Castlevania
 # https://www.gamedeveloper.com/programming/procedural-dungeon-generation-algorithm
 
 const TILESET := preload("uid://c1k3oxffmy2kj")
+const SCRIPT := preload("uid://jgoxxbss7bm5")
 
 var _spawn: GraphCell
 
@@ -109,6 +110,10 @@ func generate_maps() -> Array[TileMapLayer]:
 	underlay.tile_set = TILESET
 	overlay.tile_set = TILESET
 	wall_overlay.tile_set = TILESET
+	
+	ground.set_script(SCRIPT)
+	ground._wall = wall
+	ground._hazard = underlay
 	
 	var visited: Array[GraphCell]
 	var current: Array[GraphCell] = [_spawn]
@@ -222,8 +227,8 @@ func place_deco(r: Rect2, h: TileMapLayer):
 	
 	if randf() >= 0.125:
 		var s := Vector2i(
-			randi_range(2, size.x - 1),
-			randi_range(2, size.y - 1)
+			randi_range(2, mini(size.x - 1, 5)),
+			randi_range(2, mini(size.y - 1, 5))
 		)
 		
 		var p := Vector2i(
