@@ -56,7 +56,7 @@ func _on_body_entered(body: Node2D) -> void:
 			point_light_2d_2.visible = false
 			collision_shape_2d.set_deferred("disabled", true)
 			gpu_particles_2d_2.restart()
-			body.queue_free() # Just kill the monster
+			body.damage(global_position.direction_to(body.global_position), 2)
 
 
 func _on_gpu_particles_2d_finished() -> void:

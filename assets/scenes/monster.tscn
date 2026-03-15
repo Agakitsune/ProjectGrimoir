@@ -28,5 +28,10 @@ debug_enabled = true
 [node name="Shoot" type="Timer" parent="." unique_id=704499543]
 wait_time = 1.5
 
+[node name="Stun" type="Timer" parent="." unique_id=1409625852]
+wait_time = 0.5
+one_shot = true
+
 [connection signal="timeout" from="Wander" to="." method="_on_wander_timeout"]
 [connection signal="timeout" from="Shoot" to="." method="_on_shoot_timeout"]
+[connection signal="timeout" from="Stun" to="." method="_on_stun_timeout"]

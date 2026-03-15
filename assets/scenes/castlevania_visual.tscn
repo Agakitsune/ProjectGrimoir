@@ -1,15 +1,62 @@
-[gd_scene format=3 uid="uid://b7ndi5eggbyfi"]
+[gd_scene format=4 uid="uid://b7ndi5eggbyfi"]
 
 [ext_resource type="Script" uid="uid://opxikfmwpnc7" path="res://assets/scripts/castlevania_visual.gd" id="1_rj2gq"]
 [ext_resource type="Script" uid="uid://b7ur1m3d1xonf" path="res://assets/scripts/minimap.gd" id="2_rj2gq"]
 [ext_resource type="PackedScene" uid="uid://qenc21ydshf7" path="res://assets/scenes/monster.tscn" id="3_alwms"]
+[ext_resource type="TileSet" uid="uid://c1k3oxffmy2kj" path="res://assets/resources/tilesets/dungeon.tres" id="4_vpjm3"]
+[ext_resource type="Script" uid="uid://b7gs0t5aqxih4" path="res://assets/scripts/skill_manager.gd" id="5_symxw"]
+[ext_resource type="Texture2D" uid="uid://dtvb05oy2abd6" path="res://assets/textures/player.png" id="6_p56f8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rj2gq"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gc7y0"]
+bg_color = Color(0.446777, 0.44677705, 0.44677693, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19793722, 0.19793728, 0.1979371, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 5
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ypxwc"]
+bg_color = Color(0.87038714, 1.4439225e-06, 1.2513996e-06, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 5
+expand_margin_right = 4.0
+
+[sub_resource type="Theme" id="Theme_lb3c3"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_gc7y0")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_ypxwc")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2n7r8"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7yg44"]
+bg_color = Color(1, 0.00999999, 0.00999999, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_duwrv"]
+size = Vector2(16, 16)
+
 [node name="CastlevaniaVisual" type="Node2D" unique_id=1928961590]
 script = ExtResource("1_rj2gq")
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=479954613]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1487448944]
 
@@ -49,4 +96,40 @@ layout_mode = 2
 [node name="Monster" parent="." unique_id=643485541 node_paths=PackedStringArray("goal") instance=ExtResource("3_alwms")]
 z_index = 1024
 position = Vector2(-91, -37)
-goal = NodePath("../Camera2D")
+goal = NodePath("../Player")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1654044126]
+tile_map_data = PackedByteArray("AAD6/wMAAAAFAAAAAAD7/wMAAAADAAAAAAD7/wIAAAADAAAAAAD8/wIAAAAFAAAAAAD9/wEAAAACAAAAAAD+/wEAAAACAAEAAAD+/wAAAAAAAAAAAAD//wAAAAAAAAAAAAAAAP//AAABAAEAAAABAP//AAACAAAAAAABAP7/AAAFAAAAAAACAP7/AAAAAAAAAAADAP7/AAAEAAAAAAAFAAMAAAAGAAAAAAAFAAIAAAADAAAAAAAFAAEAAAAAAAAAAAAFAAAAAAAAAAAAAAAFAP//AAABAAAAAAAFAP7/AAAFAAAAAAAFAP3/AAAGAAAAAAAFAPz/AAAGAAAAAAAEAAMAAAABAAAAAAAEAAIAAAAEAAAAAAAEAAEAAAAGAAAAAAAEAAAAAAAAAAAAAAAEAP//AAAAAAAAAAAEAP7/AAAGAAAAAAAEAP3/AAADAAAAAAAEAPz/AAAAAAAAAAADAAMAAAAFAAAAAAADAAIAAAADAAAAAAADAAEAAAAAAAAAAAADAAAAAAAAAAAAAAADAP//AAAFAAEAAAADAP3/AAAAAAAAAAADAPz/AAADAAAAAAACAAMAAAACAAAAAAACAAIAAAABAAEAAAACAAEAAAACAAAAAAACAAAAAAACAAAAAAACAP//AAAGAAEAAAACAP3/AAABAAAAAAACAPz/AAADAAAAAAABAAMAAAAGAAEAAAABAAIAAAADAAAAAAABAAEAAAAAAAAAAAABAAAAAAAEAAAAAAABAP3/AAAAAAAAAAABAPz/AAADAAAAAAAAAAMAAAAFAAEAAAAAAAIAAAAAAAAAAAAAAAEAAAADAAAAAAAAAAAAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP3/AAADAAAAAAAAAPz/AAABAAAAAAD//wMAAAAGAAEAAAD//wIAAAAAAAAAAAD//wEAAAAAAAAAAAD/////AAAFAAAAAAD///7/AAADAAAAAAD///3/AAAGAAAAAAD///z/AAAAAAAAAAD+/wMAAAAAAAAAAAD+/wIAAAAEAAEAAAD+////AAAAAAAAAAD+//7/AAAAAAAAAAD+//3/AAAAAAAAAAD+//z/AAAAAAAAAAD9/wMAAAAEAAAAAAD9/wIAAAAFAAEAAAD9/wAAAAADAAAAAAD9////AAABAAEAAAD9//7/AAAFAAAAAAD9//3/AAAFAAAAAAD9//z/AAAGAAAAAAD8/wMAAAAFAAAAAAD8/wEAAAAAAAAAAAD8/wAAAAAAAAAAAAD8////AAAAAAAAAAD8//7/AAAAAAAAAAD8//3/AAACAAEAAAD8//z/AAAGAAAAAAD7/wEAAAACAAEAAAD7/wAAAAAAAAAAAAD7////AAABAAAAAAD7//7/AAADAAEAAAD7//3/AAAAAAAAAAD7//z/AAAAAAAAAAD6/wIAAAAGAAEAAAD6/wEAAAACAAEAAAD6/wAAAAABAAAAAAD6////AAAEAAEAAAD6//7/AAACAAAAAAD6//3/AAAEAAEAAAD6//z/AAAGAAEAAAA=")
+tile_set = ExtResource("4_vpjm3")
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=1355537154]
+unique_name_in_owner = true
+z_index = 1
+y_sort_enabled = true
+texture_filter = 1
+collision_layer = 4
+collision_mask = 9
+script = ExtResource("5_symxw")
+
+[node name="HealthBar" type="ProgressBar" parent="Player" unique_id=1629366202]
+z_index = 64
+offset_left = -220.0
+offset_top = -103.0
+offset_right = -121.0
+offset_bottom = -94.0
+theme = SubResource("Theme_lb3c3")
+theme_override_styles/background = SubResource("StyleBoxFlat_2n7r8")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7yg44")
+max_value = 8.0
+step = 1.0
+value = 8.0
+show_percentage = false
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=2138321442]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=684067838]
+shape = SubResource("RectangleShape2D_duwrv")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=951501266]
+position = Vector2(-2.9802322e-07, 2.3841858e-07)
+texture = ExtResource("6_p56f8")
