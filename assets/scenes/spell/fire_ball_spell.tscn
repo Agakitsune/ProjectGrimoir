@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://xha3tl6b7ole"]
+
+[ext_resource type="Script" uid="uid://bhuvm0am8202f" path="res://assets/scripts/fire_ball.gd" id="1_6rdtt"]
+[ext_resource type="Texture2D" uid="uid://kgaecho73rqx" path="res://assets/textures/Red Effect Bullet Impact Explosion 32x32.png" id="2_t4483"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4mylo"]
+size = Vector2(32, 32)
+
+[sub_resource type="Animation" id="Animation_t4483"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(512, 384, 128, 32)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_b12u6"]
+resource_name = "fireball_blow"
+length = 0.36666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(512, 384, 128, 32)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_4mylo"]
+resource_name = "fireball_move"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.19999999, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(352, 0, 128, 32)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_b12u6"]
+_data = {
+&"RESET": SubResource("Animation_t4483"),
+&"fireball_blow": SubResource("Animation_b12u6"),
+&"fireball_move": SubResource("Animation_4mylo")
+}
+
+[node name="FireBallSpell" type="Node2D" unique_id=1356372586]
+script = ExtResource("1_6rdtt")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1249593359]
+texture_filter = 1
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_t4483")
+hframes = 4
+region_enabled = true
+region_rect = Rect2(512, 384, 128, 32)
+
+[node name="Area2D" type="Area2D" parent="Sprite2D" unique_id=854722640]
+scale = Vector2(0.9999999, 0.9999999)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Area2D" unique_id=430777403]
+shape = SubResource("RectangleShape2D_4mylo")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D" unique_id=763653236]
+libraries/ = SubResource("AnimationLibrary_b12u6")
+
+[connection signal="area_entered" from="Sprite2D/Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="animation_finished" from="Sprite2D/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

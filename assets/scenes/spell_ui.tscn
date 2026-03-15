@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://elsg2kh525wl"]
+
+[sub_resource type="GDScript" id="GDScript_chqym"]
+script/source = "extends Control
+@onready var sprite_2d: Sprite2D = $Panel/Sprite2D
+@onready var cooldown_label: Label = $Panel/CooldownLabel
+@onready var key: Label = $Panel/Key
+@onready var panel: Panel = $Panel/Panel
+var max_cooldown
+var current_cooldown = 0.0
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if current_cooldown > 0:
+		cooldown_label.text = str(int(current_cooldown))
+		current_cooldown -= delta
+	else:
+		panel.visible = false
+		cooldown_label.visible = false
+
+func set_cooldown():
+	current_cooldown = max_cooldown
+	panel.visible = true
+	cooldown_label.visible = true
+	
+func setup(text, spell_key, cooldown_time):
+	key.text = spell_key
+	sprite_2d.texture = load(text)
+	max_cooldown = cooldown_time
+"
+
+[node name="SpellUi" type="Control" unique_id=1938893711]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_chqym")
+
+[node name="Panel" type="Panel" parent="." unique_id=1627568750]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Panel" unique_id=1662616588]
+texture_filter = 1
+position = Vector2(20, 20)
+
+[node name="Panel" type="Panel" parent="Panel" unique_id=311335684]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CooldownLabel" type="Label" parent="Panel" unique_id=1268383723]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -6.0
+offset_right = 5.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Key" type="Label" parent="Panel" unique_id=2076546260]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 30.0
+offset_right = 43.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 8
