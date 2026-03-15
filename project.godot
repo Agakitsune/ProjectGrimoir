@@ -14,6 +14,15 @@ config/name="ProjectGrimoir"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=480
+window/size/viewport_height=270
+window/size/mode=3
+window/size/resizable=false
+window/stretch/mode="viewport"
+window/stretch/scale_mode="integer"
+
 [file_customization]
 
 folder_colors={
@@ -21,6 +30,8 @@ folder_colors={
 "res://assets/resources/tilesets/": "teal",
 "res://assets/scenes/": "red",
 "res://assets/scripts/": "yellow",
+"res://assets/scripts/castlevania/": "orange",
+"res://assets/shaders/": "gray",
 "res://assets/textures/": "blue"
 }
 
