@@ -8,6 +8,7 @@
 size = Vector2(8, 8)
 
 [node name="BadBullet" type="Area2D" unique_id=1715541189]
+z_index = 64
 texture_filter = 1
 collision_layer = 0
 collision_mask = 5

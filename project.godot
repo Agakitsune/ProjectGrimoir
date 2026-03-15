@@ -32,6 +32,7 @@ folder_colors={
 "res://assets/scenes/": "red",
 "res://assets/scripts/": "yellow",
 "res://assets/scripts/castlevania/": "orange",
+"res://assets/scripts/spells/": "pink",
 "res://assets/shaders/": "gray",
 "res://assets/textures/": "blue"
 }

@@ -124,6 +124,11 @@ func generate_maps() -> Array[TileMapLayer]:
 	var overlay := TileMapLayer.new()
 	var wall_overlay := TileMapLayer.new()
 	
+	wall.z_index = 1
+	wall.y_sort_enabled = true
+	overlay.z_index = 1
+	overlay.y_sort_enabled = true
+	
 	ground.tile_set = TILESET
 	wall.tile_set = TILESET
 	underlay.tile_set = TILESET

@@ -1,0 +1,44 @@
+extends Area2D
+
+var speed := 6.0
+var direction: Vector2
+
+@onready var gpu_particles_2d: GPUParticles2D = $GPUParticles2D
+@onready var sprite_2d: Sprite2D = $Sprite2D
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var point_light_2d: PointLight2D = $PointLight2D
+@onready var point_light_2d_2: PointLight2D = $PointLight2D2
+
+func setup(player: Node2D, mouse_pos: Vector2):
+	direction = player.position.direction_to(mouse_pos)
+	global_position = player.position
+
+func _physics_process(delta: float) -> void:
+	sprite_2d.rotate(delta * speed)
+	point_light_2d.rotate(delta * -speed)
+	point_light_2d_2.rotate(delta * speed / 2.0)
+	#sprite_2d_2.rotate(delta * -speed)
+
+	position += direction * speed * 32.0 * delta
+
+
+func _on_body_entered(body: Node2D) -> void:
+	if body is TileMapLayer:
+		gpu_particles_2d.emitting = false
+		sprite_2d.visible = false
+		point_light_2d.visible = false
+		point_light_2d_2.visible = false
+		collision_shape_2d.set_deferred("disabled", true)
+	if body is CharacterBody2D:
+		if body.get_collision_layer_value(5):
+			gpu_particles_2d.emitting = false
+			sprite_2d.visible = false
+			point_light_2d.visible = false
+			point_light_2d_2.visible = false
+			collision_shape_2d.set_deferred("disabled", true)
+			body.queue_free() # Just kill the monster
+
+
+func _on_gpu_particles_2d_finished() -> void:
+	queue_free()
+	pass # Replace with function body.

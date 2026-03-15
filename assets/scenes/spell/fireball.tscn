@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://w10kyeikbffb"]
+
+[ext_resource type="Texture2D" uid="uid://j6n84i135omj" path="res://assets/textures/fireball_simple.png" id="1_luij2"]
+[ext_resource type="Script" uid="uid://3f3kuk22w4y6" path="res://assets/scripts/spells/fireball.gd" id="1_ovjyn"]
+[ext_resource type="Texture2D" uid="uid://nptlfmx1l0cd" path="res://assets/textures/particle.png" id="3_l63v2"]
+
+[sub_resource type="Gradient" id="Gradient_wc1jw"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.33, 0.66, 1)
+colors = PackedColorArray(0.9490196, 0.9254902, 0.54509807, 1, 0.9843137, 0.7254902, 0.32941177, 1, 0.8039216, 0.40784314, 0.23921569, 1, 0.6, 0.23921569, 0.25490198, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3u1a0"]
+gradient = SubResource("Gradient_wc1jw")
+
+[sub_resource type="Curve" id="Curve_l4mhe"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xrq5d"]
+curve = SubResource("Curve_l4mhe")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ragm5"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 2.0
+angle_min = 1.0728835e-05
+angle_max = 360.00003
+gravity = Vector3(0, 0, 0)
+scale_min = 4.0
+scale_max = 8.0
+scale_curve = SubResource("CurveTexture_xrq5d")
+color_ramp = SubResource("GradientTexture1D_3u1a0")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l63v2"]
+size = Vector2(8, 8)
+
+[node name="Fireball" type="Area2D" unique_id=375679941]
+z_index = 64
+texture_filter = 1
+collision_layer = 2
+collision_mask = 17
+script = ExtResource("1_ovjyn")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1688675749]
+light_mask = 0
+texture = ExtResource("1_luij2")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=2140872541]
+light_mask = 0
+amount = 32
+texture = ExtResource("3_l63v2")
+lifetime = 0.5
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_ragm5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1403658313]
+shape = SubResource("RectangleShape2D_l63v2")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=100314763]
+z_index = 4096
+color = Color(0.9843137, 0.7254902, 0.32941177, 1)
+energy = 0.5
+shadow_enabled = true
+texture = ExtResource("3_l63v2")
+texture_scale = 32.0
+
+[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=629111289]
+z_index = 4096
+color = Color(0.8039216, 0.40784314, 0.23921569, 1)
+energy = 0.5
+shadow_enabled = true
+texture = ExtResource("3_l63v2")
+texture_scale = 50.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="finished" from="GPUParticles2D" to="." method="_on_gpu_particles_2d_finished"]

@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 const SPEED = 70
 
-const FIRE_BALL_SPELL = preload("res://assets/scenes/spell/fire_ball_spell.tscn")
+const FIRE_BALL_SPELL = preload("uid://w10kyeikbffb")
 const LIGHTNING_BOLT_SPELL = preload("res://assets/scenes/spell/lightning_bolt_spell.tscn")
 const FIRE_SLASH = preload("res://assets/scenes/spell/fire_slash.tscn")
 const SPELL_UI = preload("res://assets/scenes/spell_ui.tscn")
@@ -35,8 +35,13 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed(spell.action):
 			if spell.ui:
 				spell.ui.set_cooldown()
-			var spell_instance = spell.scene.instantiate()
-			add_child(spell_instance)
+			var spell_instance = spell.scene.instantiate() as Node2D
+			if spell.fixed:
+				add_child(spell_instance)
+			else:
+				get_parent().add_child(spell_instance)
+				#spell_instance.global_position = global_position
+				#spell_instance.direction = global_position.direction_to(get_local_mouse_position())
 			spell_instance.setup(self, mouse_pos)
 
 func add_pv(value):
@@ -55,7 +60,8 @@ var spells = {
 		"texture": "res://assets/textures/fireball.png",
 		"cooldown": 1,
 		"unlocked": false,
-		"ui": null
+		"ui": null,
+		"fixed": false
 	},
 	"fireslash": {
 		"scene": FIRE_SLASH,
@@ -64,7 +70,8 @@ var spells = {
 		"texture": "res://assets/textures/fireslash.png",
 		"cooldown": 4,
 		"unlocked": false,
-		"ui": null
+		"ui": null,
+		"fixed": true
 	},
 	"lightning": {
 		"scene": LIGHTNING_BOLT_SPELL,
@@ -73,7 +80,8 @@ var spells = {
 		"texture": "res://assets/textures/lightningbolt.png",
 		"cooldown": 3,
 		"unlocked": false,
-		"ui": null
+		"ui": null,
+		"fixed": false
 	}
 }
 

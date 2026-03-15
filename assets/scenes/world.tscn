@@ -52,8 +52,46 @@ bg_color = Color(1, 0.00999999, 0.00999999, 1)
 size = Vector2(16, 16)
 
 [node name="World" type="Node2D" unique_id=876189265]
+y_sort_enabled = true
 texture_filter = 1
 script = ExtResource("1_0moxn")
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=1240595773]
+unique_name_in_owner = true
+z_index = 1
+y_sort_enabled = true
+collision_layer = 4
+collision_mask = 9
+script = ExtResource("3_vu0c7")
+
+[node name="HealthBar" type="ProgressBar" parent="Player" unique_id=181390949]
+z_index = 64
+offset_left = -220.0
+offset_top = -103.0
+offset_right = -121.0
+offset_bottom = -94.0
+theme = SubResource("Theme_gc7y0")
+theme_override_styles/background = SubResource("StyleBoxFlat_0moxn")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vu0c7")
+max_value = 8.0
+step = 1.0
+value = 8.0
+show_percentage = false
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1490461724]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=172978801]
+shape = SubResource("RectangleShape2D_bd1kc")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=438452194]
+position = Vector2(-2.9802322e-07, 2.3841858e-07)
+texture = ExtResource("2_ypxwc")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1886236323]
+color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="Maps" type="Node2D" parent="." unique_id=66235838]
+unique_name_in_owner = true
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=1086463610]
 transparent_bg = true
@@ -70,32 +108,4 @@ zoom = Vector2(0.5, 0.5)
 unique_name_in_owner = true
 script = ExtResource("2_gc7y0")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1240595773]
-z_index = 15
-collision_layer = 4
-collision_mask = 0
-script = ExtResource("3_vu0c7")
-
-[node name="HealthBar" type="ProgressBar" parent="CharacterBody2D" unique_id=181390949]
-offset_left = -220.0
-offset_top = -103.0
-offset_right = -121.0
-offset_bottom = -94.0
-theme = SubResource("Theme_gc7y0")
-theme_override_styles/background = SubResource("StyleBoxFlat_0moxn")
-theme_override_styles/fill = SubResource("StyleBoxFlat_vu0c7")
-max_value = 8.0
-step = 1.0
-value = 8.0
-show_percentage = false
-
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1490461724]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=172978801]
-shape = SubResource("RectangleShape2D_bd1kc")
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=438452194]
-position = Vector2(-2.9802322e-07, 2.3841858e-07)
-texture = ExtResource("2_ypxwc")
-
-[connection signal="killed" from="CharacterBody2D" to="." method="_on_character_body_2d_killed"]
+[connection signal="killed" from="Player" to="." method="_on_character_body_2d_killed"]
