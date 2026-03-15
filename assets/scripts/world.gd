@@ -23,7 +23,7 @@ func _ready() -> void:
 	
 	for p in castle._monster_spawns:
 		var m := MONSTER.instantiate() as Node2D
-		add_child(m)
+		maps.add_child(m)
 		m.goal = player
 		m.z_index = 64
 		m.global_position = p

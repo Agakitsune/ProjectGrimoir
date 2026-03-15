@@ -8,6 +8,7 @@ const FIRE_SLASH = preload("res://assets/scenes/spell/fire_slash.tscn")
 const SPELL_UI = preload("res://assets/scenes/spell_ui.tscn")
 
 @onready var health_bar: ProgressBar = $HealthBar
+@onready var misc: Node2D = %MiscX
 
 signal killed
 
@@ -58,7 +59,7 @@ var spells = {
 		"action": "e_spell",
 		"action_key": "E",
 		"texture": "res://assets/textures/fireball.png",
-		"cooldown": 1,
+		"cooldown": 0.25,
 		"unlocked": false,
 		"ui": null,
 		"fixed": false
