@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://f3yt4filrf1"]
+
+[ext_resource type="Texture2D" uid="uid://gfmk5e2uld1d" path="res://assets/textures/Blue Effect Bullet Impact Explosion 32x32.png" id="1_1godd"]
+
+[sub_resource type="GDScript" id="GDScript_1godd"]
+script/source = "extends Skill
+@onready var lightning_bolt: Sprite2D = $Sprite2D
+@onready var animation_player: AnimationPlayer = $Sprite2D/AnimationPlayer
+
+var random_pos: float
+var radius := 45
+var lifetime = 1
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	lifetime -= delta
+	if lifetime <= 0:
+		queue_free()
+	launch(delta)
+
+func launch(delta):
+	animation_player.play(\"Lightning_bolt\")
+
+func setup(character_body_2d,mouse_pos):
+	position = mouse_pos
+	var angle = randf_range(0, TAU)
+	var distance = randf_range(0, radius)
+	var offset = Vector2(cos(angle), sin(angle)) * distance
+
+	lightning_bolt.position = offset
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vyldr"]
+size = Vector2(32, 32)
+
+[sub_resource type="Animation" id="Animation_vyldr"]
+resource_name = "Lightning_bolt"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_elrug"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_elrug"]
+_data = {
+&"Lightning_bolt": SubResource("Animation_vyldr"),
+&"RESET": SubResource("Animation_elrug")
+}
+
+[node name="LightningBoltSpell" type="Node2D" unique_id=646127193]
+scale = Vector2(0.6, 0.6)
+script = SubResource("GDScript_1godd")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=867180998]
+texture_filter = 1
+texture = ExtResource("1_1godd")
+hframes = 4
+region_enabled = true
+region_rect = Rect2(352, 128, 128, 32)
+
+[node name="Area2D" type="Area2D" parent="Sprite2D" unique_id=1036631706]
+scale = Vector2(0.9999999, 0.9999999)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Area2D" unique_id=395792984]
+shape = SubResource("RectangleShape2D_vyldr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D" unique_id=1117173989]
+libraries/ = SubResource("AnimationLibrary_elrug")

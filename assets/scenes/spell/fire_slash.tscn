@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://3psmusieoc8a"]
+
+[ext_resource type="Texture2D" uid="uid://kgaecho73rqx" path="res://assets/textures/Red Effect Bullet Impact Explosion 32x32.png" id="1_uk0mh"]
+
+[sub_resource type="GDScript" id="GDScript_uk0mh"]
+script/source = "extends Skill
+@onready var animation_player: AnimationPlayer = $Sprite2D/AnimationPlayer
+
+var lifetime := 1.0
+
+func _ready() -> void:
+	randomize()
+	
+	rotation = (PI/2) * (randi() % 4)
+	animation_player.play(\"fire_slash\")
+
+func _process(delta: float) -> void:
+	lifetime -= delta
+	if lifetime <= 0:
+		queue_free()
+
+func setup(sprite_pos,mouse_pos):
+	pass
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if anim_name == \"fire_slash\":
+		queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_volfm"]
+size = Vector2(32, 96)
+
+[sub_resource type="Animation" id="Animation_uk0mh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_volfm"]
+resource_name = "fire_slash"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yl2ex"]
+_data = {
+&"RESET": SubResource("Animation_uk0mh"),
+&"fire_slash": SubResource("Animation_volfm")
+}
+
+[node name="FireSlash" type="Node2D" unique_id=1632909997]
+script = SubResource("GDScript_uk0mh")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1653464788]
+texture_filter = 1
+position = Vector2(23.000004, 0)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_uk0mh")
+hframes = 3
+region_enabled = true
+region_rect = Rect2(64, 128, 96, 96)
+
+[node name="Area2D" type="Area2D" parent="Sprite2D" unique_id=2128091771]
+scale = Vector2(0.9999999, 0.9999999)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Area2D" unique_id=2021309556]
+position = Vector2(0, 8.195641e-07)
+shape = SubResource("RectangleShape2D_volfm")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D" unique_id=494641600]
+libraries/ = SubResource("AnimationLibrary_yl2ex")
+
+[connection signal="animation_finished" from="Sprite2D/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
