@@ -9,9 +9,10 @@ var castle := Castlevania.new()
 var _accum := Vector2.ZERO
 
 func _ready() -> void:
-	#castle.room_added.connect(_create_rect)
 	for l in castle.generate():
 		add_child.call_deferred(l)
+	
+	#region.bake_navigation_polygon(false)
 	
 	node_2d.castle = castle
 

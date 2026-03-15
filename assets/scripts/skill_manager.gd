@@ -1,0 +1,74 @@
+extends Node2D
+
+const FIRE_BALL_SPELL = preload("res://assets/scenes/spell/fire_ball_spell.tscn")
+const LIGHTNING_BOLT_SPELL = preload("res://assets/scenes/spell/lightning_bolt_spell.tscn")
+const FIRE_SLASH = preload("res://assets/scenes/spell/fire_slash.tscn")
+const SPELL_UI = preload("res://assets/scenes/spell_ui.tscn")
+
+@onready var character_body_2d: CharacterBody2D = $CharacterBody2D
+
+var spells = {
+	"fireball": {
+		"scene": FIRE_BALL_SPELL,
+		"action": "e_spell",
+		"action_key": "E",
+		"texture": "res://assets/textures/fireball.png",
+		"cooldown": 1,
+		"unlocked": false,
+		"ui": null
+	},
+	"fireslash": {
+		"scene": FIRE_SLASH,
+		"action": "f_spell",
+		"action_key": "F",
+		"texture": "res://assets/textures/fireslash.png",
+		"cooldown": 4,
+		"unlocked": false,
+		"ui": null
+	},
+	"lightning": {
+		"scene": LIGHTNING_BOLT_SPELL,
+		"action": "q_spell",
+		"action_key": "Q",
+		"texture": "res://assets/textures/lightningbolt.png",
+		"cooldown": 3,
+		"unlocked": false,
+		"ui": null
+	}
+}
+
+func _ready() -> void:
+	unlock_spell("fireball")
+	unlock_spell("fireslash")
+	unlock_spell("lightning")
+
+func _process(delta: float) -> void:
+	var mouse_pos = get_global_mouse_position()
+	for spell_name in spells:
+		var spell = spells[spell_name]
+		if not spell.unlocked or spell.ui.current_cooldown > 0:
+			continue
+		if Input.is_action_just_pressed(spell.action):
+			if spell.ui:
+				spell.ui.set_cooldown()
+			var spell_instance = spell.scene.instantiate()
+			add_child(spell_instance)
+			spell_instance.setup(character_body_2d.global_position, mouse_pos)
+
+
+# Débloquer un sort
+func unlock_spell(spell_name:String):
+	if not spells.has(spell_name):
+		return
+	var spell = spells[spell_name]
+
+	if spell.unlocked:
+		return
+	spell.unlocked = true
+	var spell_ui = SPELL_UI.instantiate()
+	add_child(spell_ui)
+	spell_ui.setup(spell.texture, spell.action_key, spell.cooldown)
+	spell.ui = spell_ui
+	var index = spell_ui.get_index()
+	spell_ui.position = Vector2(-200 + 25 * index , 50)
+	spell_ui.scale = Vector2(0.4,0.4)

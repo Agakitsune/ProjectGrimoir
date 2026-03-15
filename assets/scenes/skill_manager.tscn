@@ -1,13 +1,13 @@
-[gd_scene format=3 uid="uid://b7ndi5eggbyfi"]
+[gd_scene format=3 uid="uid://crm8gdkagocjh"]
 
-[ext_resource type="Script" uid="uid://opxikfmwpnc7" path="res://assets/scripts/castlevania_visual.gd" id="1_rj2gq"]
-[ext_resource type="Script" uid="uid://b7ur1m3d1xonf" path="res://assets/scripts/minimap.gd" id="2_rj2gq"]
-[ext_resource type="PackedScene" uid="uid://qenc21ydshf7" path="res://assets/scenes/monster.tscn" id="3_alwms"]
+[ext_resource type="Script" uid="uid://opxikfmwpnc7" path="res://assets/scripts/castlevania_visual.gd" id="1_1dp5f"]
+[ext_resource type="Script" uid="uid://b7ur1m3d1xonf" path="res://assets/scripts/minimap.gd" id="2_4bem7"]
+[ext_resource type="PackedScene" uid="uid://qenc21ydshf7" path="res://assets/scenes/monster.tscn" id="3_bsllg"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rj2gq"]
 
 [node name="CastlevaniaVisual" type="Node2D" unique_id=1928961590]
-script = ExtResource("1_rj2gq")
+script = ExtResource("1_1dp5f")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=479954613]
 
@@ -37,7 +37,7 @@ zoom = Vector2(0.5, 0.5)
 
 [node name="Node2D" type="Node2D" parent="CanvasLayer/PanelContainer/ColorRect/SubViewport" unique_id=671870726]
 unique_name_in_owner = true
-script = ExtResource("2_rj2gq")
+script = ExtResource("2_4bem7")
 
 [node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/PanelContainer" unique_id=1832732795]
 layout_mode = 2
@@ -46,7 +46,5 @@ layout_mode = 2
 custom_minimum_size = Vector2(4, 4)
 layout_mode = 2
 
-[node name="Monster" parent="." unique_id=643485541 node_paths=PackedStringArray("goal") instance=ExtResource("3_alwms")]
-z_index = 1024
-position = Vector2(-91, -37)
-goal = NodePath("../Camera2D")
+[node name="Monster" parent="." unique_id=643485541 instance=ExtResource("3_bsllg")]
+position = Vector2(-151, -50)
