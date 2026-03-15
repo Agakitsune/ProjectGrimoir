@@ -3,7 +3,7 @@ extends Skill
 @onready var animation_player: AnimationPlayer = $Sprite2D/AnimationPlayer
 
 var hit = false
-var speed = 100
+var speed = 170
 var random_angle: float
 
 # Called when the node enters the scene tree for the first time.
@@ -24,9 +24,9 @@ func launch(delta):
 	animation_player.play("fireball_move")
 	fireball.position += dir * speed * delta
 
-func setup(sprite_pos, mouse_pos):
-	direction = (mouse_pos - sprite_pos).normalized()
-	position = sprite_pos
+func setup(player, mouse_pos):
+	direction = (mouse_pos - player.position).normalized()
+	global_position = player.position
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	hit = true

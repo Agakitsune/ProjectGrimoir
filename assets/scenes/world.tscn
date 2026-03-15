@@ -1,0 +1,186 @@
+[gd_scene format=3 uid="uid://df8eepr30r70g"]
+
+[ext_resource type="Texture2D" uid="uid://be7a7dl4exm13" path="res://icon.svg" id="1_ypxwc"]
+[ext_resource type="Script" uid="uid://b7ur1m3d1xonf" path="res://assets/scripts/minimap.gd" id="2_gc7y0"]
+
+[sub_resource type="GDScript" id="GDScript_0moxn"]
+script/source = "extends Node2D
+
+@onready var node_2d: Node2D = %Node2D
+
+var castle := Castlevania.new()
+
+func _ready() -> void:
+	for l in castle.generate():
+		add_child.call_deferred(l)
+	
+	node_2d.castle = castle
+"
+
+[sub_resource type="GDScript" id="GDScript_vu0c7"]
+script/source = "extends CharacterBody2D
+
+const SPEED = 70
+
+const FIRE_BALL_SPELL = preload(\"res://assets/scenes/spell/fire_ball_spell.tscn\")
+const LIGHTNING_BOLT_SPELL = preload(\"res://assets/scenes/spell/lightning_bolt_spell.tscn\")
+const FIRE_SLASH = preload(\"res://assets/scenes/spell/fire_slash.tscn\")
+const SPELL_UI = preload(\"res://assets/scenes/spell_ui.tscn\")
+
+@onready var health_bar: ProgressBar = $CharacterBody2D/HealthBar
+
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	unlock_spell(\"fireball\")
+	unlock_spell(\"fireslash\")
+	unlock_spell(\"lightning\")
+
+func _physics_process(delta: float) -> void:
+	var vec := Input.get_vector(\"left\", \"right\", \"up\", \"down\").normalized() * 4.0
+	velocity = vec * 32.0
+	
+	move_and_slide()
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	var mouse_pos = get_global_mouse_position()
+	for spell_name in spells:
+		var spell = spells[spell_name]
+		if not spell.unlocked or spell.ui.current_cooldown > 0:
+			continue
+		if Input.is_action_just_pressed(spell.action):
+			if spell.ui:
+				spell.ui.set_cooldown()
+			var spell_instance = spell.scene.instantiate()
+			add_child(spell_instance)
+			spell_instance.setup(self, mouse_pos)
+
+func add_pv(value):
+	health_bar.value += value
+
+func sub_pv(value):
+	health_bar.value -= value
+	if health_bar.value <= 0:
+		pass
+
+var spells = {
+	\"fireball\": {
+		\"scene\": FIRE_BALL_SPELL,
+		\"action\": \"e_spell\",
+		\"action_key\": \"E\",
+		\"texture\": \"res://assets/textures/fireball.png\",
+		\"cooldown\": 1,
+		\"unlocked\": false,
+		\"ui\": null
+	},
+	\"fireslash\": {
+		\"scene\": FIRE_SLASH,
+		\"action\": \"f_spell\",
+		\"action_key\": \"F\",
+		\"texture\": \"res://assets/textures/fireslash.png\",
+		\"cooldown\": 4,
+		\"unlocked\": false,
+		\"ui\": null
+	},
+	\"lightning\": {
+		\"scene\": LIGHTNING_BOLT_SPELL,
+		\"action\": \"q_spell\",
+		\"action_key\": \"Q\",
+		\"texture\": \"res://assets/textures/lightningbolt.png\",
+		\"cooldown\": 3,
+		\"unlocked\": false,
+		\"ui\": null
+	}
+}
+
+func unlock_spell(spell_name:String):
+	if not spells.has(spell_name):
+		return
+	var spell = spells[spell_name]
+
+	if spell.unlocked:
+		return
+	spell.unlocked = true
+	var spell_ui = SPELL_UI.instantiate()
+	add_child(spell_ui)
+	spell_ui.setup(spell.texture, spell.action_key, spell.cooldown)
+	spell_ui.z_index = 15
+	spell.ui = spell_ui
+	var index = spell_ui.get_index()
+	spell_ui.position = Vector2(-350 + 50 * index , 70)
+	spell_ui.scale = Vector2(1,1)
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gc7y0"]
+bg_color = Color(0.446777, 0.44677705, 0.44677693, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19793722, 0.19793728, 0.1979371, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 5
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ypxwc"]
+bg_color = Color(0.87038714, 1.4439225e-06, 1.2513996e-06, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 5
+expand_margin_right = 4.0
+
+[sub_resource type="Theme" id="Theme_gc7y0"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_gc7y0")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_ypxwc")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bd1kc"]
+size = Vector2(16, 16)
+
+[node name="World" type="Node2D" unique_id=876189265]
+script = SubResource("GDScript_0moxn")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1086463610]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(128, 128)
+render_target_update_mode = 4
+
+[node name="MiniCam" type="Camera2D" parent="SubViewport" unique_id=532566336]
+unique_name_in_owner = true
+visible = false
+zoom = Vector2(0.5, 0.5)
+
+[node name="Node2D" type="Node2D" parent="SubViewport" unique_id=1427063509]
+unique_name_in_owner = true
+script = ExtResource("2_gc7y0")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1240595773]
+z_index = 15
+script = SubResource("GDScript_vu0c7")
+
+[node name="HealthBar" type="ProgressBar" parent="CharacterBody2D" unique_id=181390949]
+offset_left = -220.0
+offset_top = -103.0
+offset_right = -121.0
+offset_bottom = -94.0
+theme = SubResource("Theme_gc7y0")
+value = 75.0
+show_percentage = false
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1490461724]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=172978801]
+shape = SubResource("RectangleShape2D_bd1kc")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=438452194]
+position = Vector2(-2.9802322e-07, 2.3841858e-07)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_ypxwc")
