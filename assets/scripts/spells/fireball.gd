@@ -19,11 +19,12 @@ func setup(player: Node2D, mouse_pos: Vector2):
 	direction = player.position.direction_to(mouse_pos)
 	global_position = player.position
 	
+	direction = direction.rotated(randf_range(-1.0, 1.0) * 0.1)
+	
 	var angle := Vector2.UP.angle_to(direction)
 	left = Vector2.RIGHT.rotated(angle)
 	
-	if randi_range(0, 1) == 0:
-		type = 1
+	type = randi_range(0, 1)
 
 func _physics_process(delta: float) -> void:
 	sprite_2d.rotate(delta * speed)
