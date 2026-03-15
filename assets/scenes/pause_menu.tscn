@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://bdoan1teivpa5"]
+
+[ext_resource type="Script" uid="uid://bypxkwjmxnrqs" path="res://assets/scripts/pause_menu.gd" id="1_8ekew"]
+
+[node name="PauseMenu" type="Control" unique_id=619798368]
+z_index = 18
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8ekew")
+
+[node name="Panel" type="Panel" parent="." unique_id=629954140]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Resume" type="Button" parent="Panel" unique_id=115521669]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.5
+offset_top = -16.0
+offset_right = 65.5
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Resume"
+
+[node name="Quit" type="Button" parent="Panel" unique_id=257358628]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.0
+offset_top = 22.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Quit"
+
+[node name="Label" type="Label" parent="Panel" unique_id=1100543964]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -58.0
+offset_top = 32.0
+offset_right = 61.0
+offset_bottom = 74.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 30
+text = "Pause"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Panel/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Panel/Quit" to="." method="_on_quit_pressed"]
