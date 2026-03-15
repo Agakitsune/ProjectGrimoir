@@ -1,11 +1,51 @@
-extends Node2D
+extends CharacterBody2D
+
+const SPEED = 70
 
 const FIRE_BALL_SPELL = preload("res://assets/scenes/spell/fire_ball_spell.tscn")
 const LIGHTNING_BOLT_SPELL = preload("res://assets/scenes/spell/lightning_bolt_spell.tscn")
 const FIRE_SLASH = preload("res://assets/scenes/spell/fire_slash.tscn")
 const SPELL_UI = preload("res://assets/scenes/spell_ui.tscn")
 
-@onready var character_body_2d: CharacterBody2D = $CharacterBody2D
+@onready var health_bar: ProgressBar = $HealthBar
+
+signal killed
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	unlock_spell("fireball")
+	unlock_spell("fireslash")
+	unlock_spell("lightning")
+
+func _physics_process(delta: float) -> void:
+	var vec := Input.get_vector("left", "right", "up", "down").normalized() * 4.0
+	velocity = vec * 32.0
+	
+	move_and_slide()
+	
+	position = position.snappedf(1.0)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	var mouse_pos = get_global_mouse_position()
+	for spell_name in spells:
+		var spell = spells[spell_name]
+		if not spell.unlocked or spell.ui.current_cooldown > 0:
+			continue
+		if Input.is_action_just_pressed(spell.action):
+			if spell.ui:
+				spell.ui.set_cooldown()
+			var spell_instance = spell.scene.instantiate()
+			add_child(spell_instance)
+			spell_instance.setup(self, mouse_pos)
+
+func add_pv(value):
+	health_bar.value += value
+
+func sub_pv(value):
+	health_bar.value -= value
+	if health_bar.value <= 0:
+		killed.emit()
 
 var spells = {
 	"fireball": {
@@ -37,26 +77,6 @@ var spells = {
 	}
 }
 
-func _ready() -> void:
-	unlock_spell("fireball")
-	unlock_spell("fireslash")
-	unlock_spell("lightning")
-
-func _process(delta: float) -> void:
-	var mouse_pos = get_global_mouse_position()
-	for spell_name in spells:
-		var spell = spells[spell_name]
-		if not spell.unlocked or spell.ui.current_cooldown > 0:
-			continue
-		if Input.is_action_just_pressed(spell.action):
-			if spell.ui:
-				spell.ui.set_cooldown()
-			var spell_instance = spell.scene.instantiate()
-			add_child(spell_instance)
-			spell_instance.setup(character_body_2d.global_position, mouse_pos)
-
-
-# Débloquer un sort
 func unlock_spell(spell_name:String):
 	if not spells.has(spell_name):
 		return
@@ -68,7 +88,8 @@ func unlock_spell(spell_name:String):
 	var spell_ui = SPELL_UI.instantiate()
 	add_child(spell_ui)
 	spell_ui.setup(spell.texture, spell.action_key, spell.cooldown)
+	spell_ui.z_index = 15
 	spell.ui = spell_ui
 	var index = spell_ui.get_index()
-	spell_ui.position = Vector2(-200 + 25 * index , 50)
-	spell_ui.scale = Vector2(0.4,0.4)
+	spell_ui.position = Vector2(-350 + 50 * index , 70)
+	spell_ui.scale = Vector2(1,1)

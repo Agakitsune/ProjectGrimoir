@@ -19,4 +19,4 @@ func _on_body_entered(body: Node2D) -> void:
 	if body is CharacterBody2D:
 		if body.get_collision_layer_value(3):
 			queue_free()
-			# damage player
+			body.sub_pv(1.0)

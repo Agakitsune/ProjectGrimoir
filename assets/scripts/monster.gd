@@ -8,6 +8,7 @@ const BULLET := preload("uid://dxva2qkax7p66")
 
 @export var goal: Node2D
 @export var max_chase_distance := 400.0
+@export var min_chase_distance := 100.0
 
 enum State {
 	Idle,
@@ -67,6 +68,11 @@ func chase_process(delta: float) -> void:
 		state = State.Idle
 		wander.start(randf_range(2.0, 3.0))
 		shoot.stop()
+		return
+	if global_position.distance_to(goal.global_position) < min_chase_distance:
+		#state = State.Idle
+		#wander.start(randf_range(2.0, 3.0))
+		#shoot.stop()
 		return
 	
 	agent.target_position = goal.global_position
