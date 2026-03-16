@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dxva2qkax7p66"]
+
+[ext_resource type="Script" uid="uid://blolm7o4t3vvi" path="res://assets/scripts/bad_bullet.gd" id="1_ic6f2"]
+[ext_resource type="Texture2D" uid="uid://bjaeqd4tip5kq" path="res://assets/textures/bad_bullet.png" id="2_1opdu"]
+[ext_resource type="Texture2D" uid="uid://dpg4xjn6dcl1d" path="res://assets/textures/bad_bullet_outline.png" id="3_dvqhi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ic6f2"]
+size = Vector2(8, 8)
+
+[node name="BadBullet" type="Area2D" unique_id=1715541189]
+z_index = 64
+texture_filter = 1
+collision_layer = 0
+collision_mask = 5
+script = ExtResource("1_ic6f2")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1021483072]
+texture = ExtResource("2_1opdu")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1227464258]
+texture = ExtResource("3_dvqhi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1495448275]
+shape = SubResource("RectangleShape2D_ic6f2")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

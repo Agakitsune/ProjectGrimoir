@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://df8eepr30r70g"]
 
-[ext_resource type="Texture2D" uid="uid://be7a7dl4exm13" path="res://icon.svg" id="1_ypxwc"]
+[ext_resource type="Script" uid="uid://dleri7awyneu4" path="res://assets/scripts/world.gd" id="1_0moxn"]
 [ext_resource type="Script" uid="uid://b7ur1m3d1xonf" path="res://assets/scripts/minimap.gd" id="2_gc7y0"]
 [ext_resource type="PackedScene" uid="uid://bdoan1teivpa5" path="res://assets/scenes/pause_menu.tscn" id="3_gc7y0"]
 
@@ -120,6 +120,8 @@ func unlock_spell(spell_name:String):
 	spell_ui.position = Vector2(-350 + 50 * index , 70)
 	spell_ui.scale = Vector2(1,1)
 "
+[ext_resource type="Texture2D" uid="uid://dtvb05oy2abd6" path="res://assets/textures/player.png" id="2_ypxwc"]
+[ext_resource type="Script" uid="uid://b7gs0t5aqxih4" path="res://assets/scripts/skill_manager.gd" id="3_vu0c7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gc7y0"]
 bg_color = Color(0.446777, 0.44677705, 0.44677693, 1)
@@ -149,11 +151,27 @@ expand_margin_right = 4.0
 ProgressBar/styles/background = SubResource("StyleBoxFlat_gc7y0")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_ypxwc")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0moxn"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vu0c7"]
+bg_color = Color(1, 0.00999999, 0.00999999, 1)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bd1kc"]
 size = Vector2(16, 16)
 
 [node name="World" type="Node2D" unique_id=876189265]
-script = SubResource("GDScript_0moxn")
+texture_filter = 1
+script = ExtResource("1_0moxn")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=1086463610]
 transparent_bg = true
@@ -170,30 +188,48 @@ zoom = Vector2(0.5, 0.5)
 unique_name_in_owner = true
 script = ExtResource("2_gc7y0")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1240595773]
-z_index = 15
-script = SubResource("GDScript_vu0c7")
+[node name="Maps" type="Node2D" parent="." unique_id=66235838]
+unique_name_in_owner = true
+y_sort_enabled = true
 
-[node name="HealthBar" type="ProgressBar" parent="CharacterBody2D" unique_id=181390949]
+[node name="Player" type="CharacterBody2D" parent="Maps" unique_id=1240595773]
+unique_name_in_owner = true
+z_index = 1
+y_sort_enabled = true
+texture_filter = 1
+collision_layer = 4
+collision_mask = 9
+script = ExtResource("3_vu0c7")
+
+[node name="HealthBar" type="ProgressBar" parent="Maps/Player" unique_id=181390949]
+z_index = 64
 offset_left = -220.0
 offset_top = -103.0
 offset_right = -121.0
 offset_bottom = -94.0
 theme = SubResource("Theme_gc7y0")
-value = 75.0
+theme_override_styles/background = SubResource("StyleBoxFlat_0moxn")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vu0c7")
+max_value = 8.0
+step = 1.0
+value = 8.0
 show_percentage = false
 
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1490461724]
+[node name="Camera2D" type="Camera2D" parent="Maps/Player" unique_id=1490461724]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=172978801]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Maps/Player" unique_id=172978801]
 shape = SubResource("RectangleShape2D_bd1kc")
 
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=438452194]
+[node name="Sprite2D" type="Sprite2D" parent="Maps/Player" unique_id=438452194]
 position = Vector2(-2.9802322e-07, 2.3841858e-07)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("1_ypxwc")
+texture = ExtResource("2_ypxwc")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1054495225]
 
 [node name="PauseMenu" parent="CanvasLayer" unique_id=619798368 instance=ExtResource("3_gc7y0")]
 visible = false
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1886236323]
+color = Color(0.7, 0.7, 0.7, 1)
+
+[connection signal="killed" from="Maps/Player" to="." method="_on_character_body_2d_killed"]

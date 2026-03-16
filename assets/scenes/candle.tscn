@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://cqrxkl5taxt48"]
+
+[ext_resource type="Script" uid="uid://ik8diutbtadw" path="res://assets/scripts/candle.gd" id="2_lkbf3"]
+
+[sub_resource type="Gradient" id="Gradient_baxvr"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_s0qkj"]
+gradient = SubResource("Gradient_baxvr")
+width = 128
+height = 128
+
+[node name="Candle" type="Node2D" unique_id=138474968]
+script = ExtResource("2_lkbf3")
+
+[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=2112637247]
+color = Color(0.8039216, 0.40784314, 0.23921569, 1)
+energy = 0.1
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_s0qkj")
+
+[node name="PointLight2D4" type="PointLight2D" parent="." unique_id=1678494574]
+color = Color(0.9843137, 0.7254902, 0.32941177, 1)
+energy = 0.1
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_s0qkj")
+texture_scale = 0.5
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1479597705]
+color = Color(0.9490196, 0.9254902, 0.54509807, 1)
+energy = 0.1
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_s0qkj")
+texture_scale = 0.25

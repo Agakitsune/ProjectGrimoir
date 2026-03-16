@@ -5,12 +5,15 @@ class_name Castlevania
 # https://www.gamedeveloper.com/programming/procedural-dungeon-generation-algorithm
 
 const TILESET := preload("uid://c1k3oxffmy2kj")
+const SCRIPT := preload("uid://jgoxxbss7bm5")
 
 var _spawn: GraphCell
 
 var _cell: Array[GraphCell]
 var _main_graph: Array[GraphCell]
 var _sub_graph: Array[GraphCell]
+
+var _monster_spawns: PackedVector2Array
 
 func generate() -> Array[TileMapLayer]:
 	# Add Spawn room:
@@ -94,7 +97,24 @@ func generate() -> Array[TileMapLayer]:
 	generate_hallways()
 	
 	# Generate tilemap layers
-	return generate_maps()
+	var maps := generate_maps()
+	
+	# Populate monsters
+	for c in _main_graph:
+		if c == _spawn:
+			continue
+		var k := randi_range(2, 4)
+		var cen := c.rect.get_center()
+		var rad := minf(c.rect.size.x, c.rect.size.y)
+		
+		for i in range(k):
+			var p := cen + get_random_point(2.0, rad - 1.0)
+			var s := Vector2i(p) / 4
+			
+			if s not in maps[1].get_used_cells_by_id(5):
+				_monster_spawns.push_back(s * 32)
+	
+	return maps
 
 
 func generate_maps() -> Array[TileMapLayer]:
@@ -104,11 +124,20 @@ func generate_maps() -> Array[TileMapLayer]:
 	var overlay := TileMapLayer.new()
 	var wall_overlay := TileMapLayer.new()
 	
+	wall.z_index = 1
+	wall.y_sort_enabled = true
+	overlay.z_index = 1
+	overlay.y_sort_enabled = true
+	
 	ground.tile_set = TILESET
 	wall.tile_set = TILESET
 	underlay.tile_set = TILESET
 	overlay.tile_set = TILESET
 	wall_overlay.tile_set = TILESET
+	
+	ground.set_script(SCRIPT)
+	ground._wall = wall
+	ground._hazard = underlay
 	
 	var visited: Array[GraphCell]
 	var current: Array[GraphCell] = [_spawn]
@@ -222,8 +251,8 @@ func place_deco(r: Rect2, h: TileMapLayer):
 	
 	if randf() >= 0.125:
 		var s := Vector2i(
-			randi_range(2, size.x - 1),
-			randi_range(2, size.y - 1)
+			randi_range(2, mini(size.x - 1, 5)),
+			randi_range(2, mini(size.y - 1, 5))
 		)
 		
 		var p := Vector2i(

@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://qenc21ydshf7"]
+
+[ext_resource type="Texture2D" uid="uid://cfhckty0lnjh1" path="res://assets/textures/base_monster.png" id="1_033cn"]
+[ext_resource type="Script" uid="uid://d3agqu00g6igl" path="res://assets/scripts/monster.gd" id="1_kqud8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_033cn"]
+size = Vector2(16, 16)
+
+[node name="Monster" type="CharacterBody2D" unique_id=643485541]
+z_index = 1
+collision_layer = 16
+collision_mask = 16
+script = ExtResource("1_kqud8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=77274592]
+texture_filter = 1
+texture = ExtResource("1_033cn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1484018874]
+shape = SubResource("RectangleShape2D_033cn")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=2080558802]
+path_postprocessing = 1
+debug_enabled = true
+
+[node name="Wander" type="Timer" parent="." unique_id=2041117534]
+
+[node name="Shoot" type="Timer" parent="." unique_id=704499543]
+wait_time = 1.5
+
+[node name="Stun" type="Timer" parent="." unique_id=1409625852]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="Wander" to="." method="_on_wander_timeout"]
+[connection signal="timeout" from="Shoot" to="." method="_on_shoot_timeout"]
+[connection signal="timeout" from="Stun" to="." method="_on_stun_timeout"]
