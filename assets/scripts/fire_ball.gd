@@ -26,11 +26,10 @@ func launch(delta):
 
 func setup(player, mouse_pos):
 	direction = (mouse_pos - player.position).normalized()
-	global_position = player.position
+	position = player.position
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	hit = true
-	print(area)
 	animation_player.play("fireball_blow")
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:

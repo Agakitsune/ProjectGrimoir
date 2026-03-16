@@ -26,7 +26,7 @@ func launch(delta):
 	animation_player.play(\"Lightning_bolt\")
 
 func setup(player, mouse_pos):
-	global_position = mouse_pos
+	position = mouse_pos
 	var angle = randf_range(0, TAU)
 	var distance = randf_range(0, radius)
 	var offset = Vector2(cos(angle), sin(angle)) * distance
