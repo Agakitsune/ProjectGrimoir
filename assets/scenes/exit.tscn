@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://cn8ccew8sv87u"]
+
+[ext_resource type="Script" uid="uid://jjipnn82w367" path="res://assets/scripts/exit.gd" id="1_jqp7h"]
+
+[sub_resource type="Gradient" id="Gradient_xlp81"]
+offsets = PackedFloat32Array(0, 0.6, 0.71378094)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jqp7h"]
+gradient = SubResource("Gradient_xlp81")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_25wct"]
+radius = 28.0
+
+[node name="Exit" type="Area2D" unique_id=1887728709]
+texture_filter = 1
+collision_layer = 0
+collision_mask = 128
+script = ExtResource("1_jqp7h")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=618922357]
+texture = SubResource("GradientTexture2D_jqp7h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1049040695]
+shape = SubResource("CircleShape2D_25wct")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -2,125 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dleri7awyneu4" path="res://assets/scripts/world.gd" id="1_0moxn"]
 [ext_resource type="Script" uid="uid://b7ur1m3d1xonf" path="res://assets/scripts/minimap.gd" id="2_gc7y0"]
-[ext_resource type="PackedScene" uid="uid://bdoan1teivpa5" path="res://assets/scenes/pause_menu.tscn" id="3_gc7y0"]
-
-[sub_resource type="GDScript" id="GDScript_0moxn"]
-script/source = "extends Node2D
-
-@onready var node_2d: Node2D = %Node2D
-
-var castle := Castlevania.new()
-var pause = false
-
-func _ready() -> void:
-	for l in castle.generate():
-		add_child.call_deferred(l)
-	
-	node_2d.castle = castle
-
-func _process(delta: float) -> void:
-	if Input.is_action_just_pressed(\"pause\"):
-		get_tree().paused = true
-"
-
-[sub_resource type="GDScript" id="GDScript_vu0c7"]
-script/source = "extends CharacterBody2D
-
-const SPEED = 70
-
-const FIRE_BALL_SPELL = preload(\"res://assets/scenes/spell/fire_ball_spell.tscn\")
-const LIGHTNING_BOLT_SPELL = preload(\"res://assets/scenes/spell/lightning_bolt_spell.tscn\")
-const FIRE_SLASH = preload(\"res://assets/scenes/spell/fire_slash.tscn\")
-const SPELL_UI = preload(\"res://assets/scenes/spell_ui.tscn\")
-
-@onready var world: Node2D = $\"..\"
-@onready var health_bar: ProgressBar = $CharacterBody2D/HealthBar
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	unlock_spell(\"fireball\")
-	unlock_spell(\"fireslash\")
-	unlock_spell(\"lightning\")
-
-func _physics_process(delta: float) -> void:
-	var vec := Input.get_vector(\"left\", \"right\", \"up\", \"down\").normalized() * 4.0
-	velocity = vec * 32.0
-	
-	move_and_slide()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	var mouse_pos = get_global_mouse_position()
-	for spell_name in spells:
-		var spell = spells[spell_name]
-		if not spell.unlocked or spell.ui.current_cooldown > 0:
-			continue
-		if Input.is_action_just_pressed(spell.action):
-			if spell.ui:
-				spell.ui.set_cooldown()
-			var spell_instance = spell.scene.instantiate()
-			if spell_name == \"fireslash\":
-				add_child(spell_instance)
-			else:
-				world.add_child(spell_instance)
-			spell_instance.setup(self, mouse_pos)
-
-func add_pv(value):
-	health_bar.value += value
-
-func sub_pv(value):
-	health_bar.value -= value
-	if health_bar.value <= 0:
-		pass
-
-var spells = {
-	\"fireball\": {
-		\"scene\": FIRE_BALL_SPELL,
-		\"action\": \"e_spell\",
-		\"action_key\": \"E\",
-		\"texture\": \"res://assets/textures/fireball.png\",
-		\"cooldown\": 1,
-		\"unlocked\": false,
-		\"ui\": null
-	},
-	\"fireslash\": {
-		\"scene\": FIRE_SLASH,
-		\"action\": \"f_spell\",
-		\"action_key\": \"F\",
-		\"texture\": \"res://assets/textures/fireslash.png\",
-		\"cooldown\": 4,
-		\"unlocked\": false,
-		\"ui\": null
-	},
-	\"lightning\": {
-		\"scene\": LIGHTNING_BOLT_SPELL,
-		\"action\": \"q_spell\",
-		\"action_key\": \"Q\",
-		\"texture\": \"res://assets/textures/lightningbolt.png\",
-		\"cooldown\": 3,
-		\"unlocked\": false,
-		\"ui\": null
-	}
-}
-
-func unlock_spell(spell_name:String):
-	if not spells.has(spell_name):
-		return
-	var spell = spells[spell_name]
-
-	if spell.unlocked:
-		return
-	spell.unlocked = true
-	var spell_ui = SPELL_UI.instantiate()
-	add_child(spell_ui)
-	spell_ui.setup(spell.texture, spell.action_key, spell.cooldown)
-	spell_ui.z_index = 15
-	spell.ui = spell_ui
-	var index = spell_ui.get_index()
-	spell_ui.position = Vector2(-350 + 50 * index , 70)
-	spell_ui.scale = Vector2(1,1)
-"
 [ext_resource type="Texture2D" uid="uid://dtvb05oy2abd6" path="res://assets/textures/player.png" id="2_ypxwc"]
+[ext_resource type="PackedScene" path="res://assets/scenes/pause_menu.tscn" id="3_gc7y0"]
 [ext_resource type="Script" uid="uid://b7gs0t5aqxih4" path="res://assets/scripts/skill_manager.gd" id="3_vu0c7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gc7y0"]
@@ -197,7 +80,7 @@ unique_name_in_owner = true
 z_index = 1
 y_sort_enabled = true
 texture_filter = 1
-collision_layer = 4
+collision_layer = 132
 collision_mask = 9
 script = ExtResource("3_vu0c7")
 
@@ -229,7 +112,63 @@ texture = ExtResource("2_ypxwc")
 [node name="PauseMenu" parent="CanvasLayer" unique_id=619798368 instance=ExtResource("3_gc7y0")]
 visible = false
 
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=2101147779]
+
+[node name="Control" type="Control" parent="CanvasLayer2" unique_id=779603543]
+process_mode = 2
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer2/Control" unique_id=2133643511]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer2/Control/PanelContainer" unique_id=113903291]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer2/Control/PanelContainer/VBoxContainer" unique_id=574040741]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 30
+text = "You ded"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Retry" type="Button" parent="CanvasLayer2/Control/PanelContainer/VBoxContainer" unique_id=762922588]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Retry"
+
+[node name="Quit" type="Button" parent="CanvasLayer2/Control/PanelContainer/VBoxContainer" unique_id=99076898]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Quit"
+
+[node name="Control" type="Control" parent="CanvasLayer2/Control/PanelContainer/VBoxContainer" unique_id=2094427997]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1886236323]
 color = Color(0.7, 0.7, 0.7, 1)
 
+[node name="CastleKiller" type="Timer" parent="." unique_id=485462746]
+wait_time = 10.0
+one_shot = true
+
+[node name="EndSpawn" type="Timer" parent="." unique_id=392988676]
+
 [connection signal="killed" from="Maps/Player" to="." method="_on_character_body_2d_killed"]
+[connection signal="pressed" from="CanvasLayer2/Control/PanelContainer/VBoxContainer/Retry" to="." method="_on_retry_pressed"]
+[connection signal="pressed" from="CanvasLayer2/Control/PanelContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="timeout" from="CastleKiller" to="." method="_on_castle_killer_timeout"]

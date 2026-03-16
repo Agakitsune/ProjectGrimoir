@@ -28,7 +28,7 @@ func generate() -> Array[TileMapLayer]:
 	
 	_cell.append(_spawn)
 	
-	for i in range(randi_range(8, 12)):
+	for i in range(randi_range(6, 8)):
 		var s := randi_range(8, 12)
 		var size := Vector2(
 			s,
@@ -46,7 +46,7 @@ func generate() -> Array[TileMapLayer]:
 		
 		_cell.append(cell)
 	
-	for i in range(60):
+	for i in range(40):
 		var s := randi_range(2, 8)
 		var size := Vector2(
 			s,

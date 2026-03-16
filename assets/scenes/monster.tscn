@@ -21,7 +21,6 @@ shape = SubResource("RectangleShape2D_033cn")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=2080558802]
 path_postprocessing = 1
-debug_enabled = true
 
 [node name="Wander" type="Timer" parent="." unique_id=2041117534]
 

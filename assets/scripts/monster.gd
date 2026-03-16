@@ -25,6 +25,7 @@ enum State {
 
 var state := State.Idle
 
+signal killed
 
 func damage(from: Vector2, x: int):
 	health -= x
@@ -34,6 +35,7 @@ func damage(from: Vector2, x: int):
 	if health <= 0:
 		collision_shape_2d.set_deferred("disabled", true)
 		stun.start(1.0)
+		killed.emit()
 	else:
 		stun.start(0.5)
 	
